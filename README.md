@@ -10,6 +10,8 @@ Depends on [Grails Platform Core][3] for events.
 
 ### Server-side
 
+#### Registering listeners
+
 If you want to use mixpanel on the server-side, you can register events using:
 
 	mixpanelService.listenFor(namespace, eventName)
@@ -22,6 +24,12 @@ Or at compile-time:
 	grails.plugin.mixpanel.events.forceasync = ...
 
 These can either be a list of event names (e.g. `['login', 'logout']`, or a map of namespace->events (e.g. `[gorm:['afterInsert', 'afterDelete'], ...]`)
+
+#### Firing events
+
+Then fire events with the [Platform Core Events API][5]:
+
+	event for:'security', topic:'userLogged', data:session.user
 
 ### Client-side
 
@@ -89,4 +97,5 @@ To tie your server-side events to the current spring security user, try defining
 [2]: http://www.mixpanel.com
 [3]: http://grails.org/plugin/platform-core
 [4]: https://mixpanel.com/docs/integration-libraries/javascript-full-api
+[5]: http://grailsrocks.github.com/grails-platform-core/guide/events.html
 

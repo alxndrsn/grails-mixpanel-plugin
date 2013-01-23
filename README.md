@@ -2,7 +2,7 @@
 
 ## Intro
 
-[Grails] ingegration for [Mixpanel][2] analytics.
+[Grails][1] ingegration for [Mixpanel][2] analytics.
 
 Depends on [Grails Platform Core][3] for events.
 

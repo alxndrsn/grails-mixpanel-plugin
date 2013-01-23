@@ -9,3 +9,7 @@ target/
 
 # Vim swap files
 *.swp
+
+*.log
+.settings
+web-app/WEB-INF

@@ -12,10 +12,10 @@ class MixpanelService {
 	def grailsApplication
 	def grailsEvents
 
-	@Lazy private def messageBuilder = new MessageBuilder(grailsApplication.config.grails.plugin.mixpanel.key)
-	@Lazy private def mixpanelApi = new MixpanelAPI()
-	@Lazy private def mixpanelHelperService = getMixpanelHelperService()
-	@Lazy private def distinctIdGetterName = getDistinctIdGetterName()
+	@Lazy private messageBuilder = new MessageBuilder(grailsApplication.config.grails.plugin.mixpanel.key)
+	@Lazy private mixpanelApi = new MixpanelAPI()
+	@Lazy private mixpanelHelperService = getMixpanelHelperService()
+	@Lazy private distinctIdGetterName = getDistinctIdGetterName()
 
 	@Listener(namespace='mixpanel', topic='async')
 	def asyncListener(MixpanelAsyncEvent event) {
@@ -70,25 +70,25 @@ class MixpanelService {
 		}
 	}
 
-	private def getMixpanelHelperService() {
+	private getMixpanelHelperService() {
 		def serviceName = grailsApplication.config.grails.plugin.mixpanel.helperService?: 'mixpanelHelperService'
 		def service = grailsApplication.mainContext.getBean(serviceName)
 		return service
 	}
 
-	private def getDistinctIdGetterName() {
+	private getDistinctIdGetterName() {
 		def getterName = grailsApplication.config.grails.plugin.mixpanel.distinctIdGetterName?: 'getDistinctId'
 	}
 
-	private def getDistinctId() {
+	private getDistinctId() {
 		return mixpanelHelperService[distinctIdGetterName]()
 	}
 
-	private def createJson(object) {
+	private createJson(object) {
 		object? new JSONObject('{'+object+'}'): null
 	}
 
-	private def deliver(mixpanelMessage) {
+	private deliver(mixpanelMessage) {
 		ClientDelivery delivery = new ClientDelivery()
 		delivery.addMessage(mixpanelMessage)
 		mixpanelApi.deliver(delivery)
@@ -106,4 +106,3 @@ class MixpanelAsyncEvent {
 		this.eventObject = eventObject
 	}
 }
-

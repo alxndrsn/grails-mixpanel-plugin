@@ -45,6 +45,9 @@ class MixpanelService {
 	}
 
 	def registerMixpanelListeners(conf) {
+		if(!conf.standard && !conf.forceasync) {
+			log.warn("NO MIXPANEL LISTENERS DEFINED. Please set grails.plugin.mixpanel.events.standards or grails.plugin.mixpanel.events.forceasync in Config.groovy if you want server side events to be logged")
+		}
 		if(conf.standard) {
 			if(conf.standard instanceof Map) {
 				conf.standard.each { namespace, events ->
@@ -53,8 +56,6 @@ class MixpanelService {
 			} else {
 				conf.standard.each { event -> listenFor(event) }
 			}
-		} else {
-			log.warn("NO MIXPANEL LISTENERS DEFINED.  Please set grails.plugin.mixpanel.events.standard in Config.groovy if you want server-side events to be logged.")
 		}
 
 		if(conf.forceasync) {
@@ -65,8 +66,6 @@ class MixpanelService {
 			} else {
 				conf.forceasync.each { event -> listenForAsync(event) }
 			}
-		} else {
-			log.warn("NO MIXPANEL LISTENERS DEFINED.  Please set grails.plugin.mixpanel.events.forceasync in Config.groovy if you want server-side events to be logged.")
 		}
 	}
 

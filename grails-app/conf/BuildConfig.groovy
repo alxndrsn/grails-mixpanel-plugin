@@ -2,7 +2,6 @@ grails.project.work.dir = 'target'
 grails.project.source.level = 1.6
 
 grails.project.dependency.resolution = {
-
 	inherits 'global'
 	log 'warn'
 
@@ -13,7 +12,7 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		compile 'com.mixpanel:mixpanel-java:1.1.0'
+		compile 'com.mixpanel:mixpanel-java:1.1.2'
 	}
 
 	plugins {
@@ -24,3 +23,4 @@ grails.project.dependency.resolution = {
 		compile ':platform-core:1.0.RC5'
 	}
 }
+

@@ -12,7 +12,7 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		compile 'com.mixpanel:mixpanel-java:1.1.2'
+		compile 'com.mixpanel:mixpanel-java:1.1.3'
 	}
 
 	plugins {

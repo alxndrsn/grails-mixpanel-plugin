@@ -16,7 +16,7 @@ class MixpanelService {
 	@Lazy private mixpanelApi = new MixpanelAPI()
 	@Lazy private mixpanelHelperService = getMixpanelHelperService()
 	@Lazy private distinctIdGetterName = getDistinctIdGetterName()
-	@Lazy private deliverEventsToMixpanel = !(grailsApplication.config.grails.plugin.mixpanel.simulate instanceof boolean?
+	@Lazy private deliverEventsToMixpanel = !(grailsApplication.config.grails.plugin.mixpanel.simulate instanceof Boolean?
 			grailsApplication.config.grails.plugin.mixpanel.simulate: true)
 
 	@Listener(namespace='mixpanel', topic='async')

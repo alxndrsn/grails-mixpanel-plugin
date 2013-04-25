@@ -16,6 +16,8 @@ class MixpanelService {
 	@Lazy private mixpanelApi = new MixpanelAPI()
 	@Lazy private mixpanelHelperService = getMixpanelHelperService()
 	@Lazy private distinctIdGetterName = getDistinctIdGetterName()
+	@Lazy private deliverEventsToMixpanel = !(grailsApplication.config.grails.plugin.mixpanel.simulate instanceof boolean?
+			grailsApplication.config.grails.plugin.mixpanel.simulate: true)
 
 	@Listener(namespace='mixpanel', topic='async')
 	def asyncListener(MixpanelAsyncEvent event) {
@@ -23,11 +25,15 @@ class MixpanelService {
 	}
 
 	def logEvent(namespace, eventName, eventObject) {
-		try {
-			def mixpanelMessage = messageBuilder.event(getDistinctId(), "$namespace::$eventName", createJson(eventObject))
-			deliver(mixpanelMessage)
-		} catch(Exception ex) {
-			log.warn("Exception thrown while processing Mixpanel event.", ex)
+		if(deliverEventsToMixpanel) {
+			try {
+				def mixpanelMessage = messageBuilder.event(getDistinctId(), "$namespace::$eventName", createJson(eventObject))
+				deliver(mixpanelMessage)
+			} catch(Exception ex) {
+				log.warn("Exception thrown while processing Mixpanel event.", ex)
+			}
+		} else {
+			log.warn "Not sending mixpanel event due to config option grails.plugin.mixpanel.simulate set or defaulting to true: {namespace:$namespace, eventName:$eventName, eventObject:$eventObject}"
 		}
 	}
 

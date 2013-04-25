@@ -59,6 +59,12 @@ To register an event, use the [standard mixpanel javascript API][4], e.g.
 
 ## Config
 
+### grails.plugin.mixpanel.simulate
+
+Set this to false if you want your events to be delivered to Mixpanel.  Otherwise they will be passed to `log.warn()` instead.  This prevents Mixpanel trials from expiring due to uninteresting events generated in development or testing.
+
+Defaults to `true`.
+
 ### grails.plugin.mixpanel.key
 
 This is your mixpanel API key.

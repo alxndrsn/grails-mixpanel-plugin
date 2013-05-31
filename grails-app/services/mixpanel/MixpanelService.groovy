@@ -3,6 +3,7 @@ package mixpanel
 import org.grails.plugin.platform.events.EventMessage
 import org.grails.plugin.platform.events.EventReply
 import grails.events.Listener
+import grails.converters.JSON
 
 import org.json.JSONObject
 
@@ -27,7 +28,7 @@ class MixpanelService {
 	def logEvent(namespace, eventName, eventObject) {
 		if(deliverEventsToMixpanel) {
 			try {
-				def mixpanelMessage = messageBuilder.event(getDistinctId(), "$namespace::$eventName", createJson(eventObject))
+				def mixpanelMessage = messageBuilder.event(getDistinctId(), "$namespace::$eventName", createJsonObject(eventObject))
 				deliver(mixpanelMessage)
 			} catch(Exception ex) {
 				log.warn("Exception thrown while processing Mixpanel event.", ex)
@@ -89,8 +90,9 @@ class MixpanelService {
 		return mixpanelHelperService[distinctIdGetterName]()
 	}
 
-	private createJson(object) {
-		object? new JSONObject('{'+object+'}'): null
+	private createJsonObject(object) {
+		def json = object as JSON
+		json? new JSONObject("${json}"): null
 	}
 
 	private deliver(mixpanelMessage) {

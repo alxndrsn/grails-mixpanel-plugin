@@ -29,7 +29,7 @@ class MixpanelService {
 		if(deliverEventsToMixpanel) {
 			try {
 				def mixpanelDistinctId = parseDistinctIdFromEventObject ? eventObject.mixpanelDistinctId : getDistinctId()
-				def mixpanelMessage = messageBuilder.event(mixpanelDistinctId, "$namespace::$eventName", createJsonObject(createJsonString(eventObject)))
+				def mixpanelMessage = messageBuilder.event(mixpanelDistinctId, "$namespace::$eventName", createJsonObject(eventObject))
 				deliver(mixpanelMessage)
 			} catch(Exception ex) {
 				log.warn("Exception thrown while processing Mixpanel event.", ex)
@@ -92,12 +92,9 @@ class MixpanelService {
 		return mixpanelHelperService[distinctIdGetterName]()
 	}
 
-	private createJsonObject(json) {
+	private createJsonObject(object) {
+		def json = object as JSON
 		json? new JSONObject("${json}"): null
-	}
-
-	private createJsonString(object) {
-		object as JSON
 	}
 
 	private deliver(mixpanelMessage) {

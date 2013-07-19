@@ -1,5 +1,5 @@
 class MixpanelGrailsPlugin {
-	def version = '1.2-SNAPSHOT'
+	def version = '1.3-SNAPSHOT'
 	def grailsVersion = "2.0 > *"
 	def title = "Mixpanel Plugin"
 	def author = "Alex Anderson"

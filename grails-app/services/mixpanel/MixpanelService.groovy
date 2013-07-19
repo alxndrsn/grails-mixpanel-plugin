@@ -22,13 +22,14 @@ class MixpanelService {
 
 	@Listener(namespace='mixpanel', topic='async')
 	def asyncListener(MixpanelAsyncEvent event) {
-		logEvent(event.namespace, event.eventName, event.eventObject)
+		logEvent(event.namespace, event.eventName, event.eventObject, true)
 	}
 
-	def logEvent(namespace, eventName, eventObject) {
+	def logEvent(namespace, eventName, eventObject, parseDistinctIdFromEventObject=false) {
 		if(deliverEventsToMixpanel) {
 			try {
-				def mixpanelMessage = messageBuilder.event(getDistinctId(), "$namespace::$eventName", createJsonObject(eventObject))
+				def mixpanelDistinctId = parseDistinctIdFromEventObject ? eventObject.mixpanelDistinctId : getDistinctId()
+				def mixpanelMessage = messageBuilder.event(mixpanelDistinctId, "$namespace::$eventName", createJsonObject(eventObject))
 				deliver(mixpanelMessage)
 			} catch(Exception ex) {
 				log.warn("Exception thrown while processing Mixpanel event.", ex)
@@ -47,6 +48,7 @@ class MixpanelService {
 	def listenForAsync(namespace=null, eventName) {
 		on(namespace, eventName) { eventObject ->
 			// Wrap the event, and fire a new event to be processed on a separate thread
+			eventObject.metaClass.mixpanelDistinctId = getDistinctId()
 			grailsEvents.event('mixpanel', 'async', new MixpanelAsyncEvent(namespace, eventName, eventObject))
 		}
 	}

@@ -73,6 +73,18 @@ This is your mixpanel API key.
 
 See Setup > Server-side
 
+### grails.plugin.mixpanel.serializers
+
+Allows you to set up custom closures that will be used to serialize objects for each namespace. Each should be a closure that takes an Object and returns a map, which the plugin will convert to JSON before sending. For example, to only send classname and id for all events in the gorm namespace:
+
+	grailsApplication.config.grails.plugin.mixpanel.serializers.gorm = { obj -> return [id: obj.id, class: obj.class] }
+
+
+### grails.plugin.mixpanel.defaultSerializer
+
+This allows a default serializer to be used if no custom one is defined for the current event's namespace (see 'grailsApplication.config.grails.plugin.mixpanel.serializers'). This should be defined as a closure that takes a single Object argument and returns a map, which will be converted to JSON by the plugin. In the absernce of a defaultSerializer, the behaviour of the plugin is to use the Grails JSON serializer on the Object.
+
+
 ### grails.plugin.mixpanel.forceasync
 
 See Setup > Server-side
@@ -84,6 +96,7 @@ This is a grails service which provides Mixpanel helper methods.  You should imp
 ### grails.plugin.mixpanel.distinctIdGetterName
 
 Name of the closure for getting the distinct ID for an event from the `helperService`.
+
 
 ## Spring Security Integration
 
@@ -104,4 +117,5 @@ To tie your server-side events to the current spring security user, try defining
 [3]: http://grails.org/plugin/platform-core
 [4]: https://mixpanel.com/docs/integration-libraries/javascript-full-api
 [5]: http://grailsrocks.github.com/grails-platform-core/guide/events.html
+
 

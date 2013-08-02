@@ -73,6 +73,16 @@ This is your mixpanel API key.
 
 See Setup > Server-side
 
+### grails.plugin.mixpanel.serializers
+
+Allows you to set up custom closures that will be used to serialize objects for each namespace. Each should be a closure that takes an Object and returns a String. For example, to use toString() for all events in the gorm namespace:
+
+	grailsApplication.config.grails.plugin.mixpanel.serializers.gorm = { obj -> return obj.toString() }
+
+### grails.plugin.mixpanel.defaultSerializer
+
+This allows a default serializer to be used if no custom one is defined for the current event's namespace (see 'grailsApplication.config.grails.plugin.mixpanel.serializers'). This should be defined as a closure that takes a single Object argument and returns a string. In the absernce of a defaultSerializer, the behaviour of the plugin is to use the Grails JSON serializer for all events except those in the 'gorm' namespace, where toString() is called.
+
 ### grails.plugin.mixpanel.forceasync
 
 See Setup > Server-side

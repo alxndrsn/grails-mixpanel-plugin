@@ -31,7 +31,7 @@ class MixpanelService {
 				def mixpanelDistinctId = parseDistinctIdFromEventObject ? eventObject.mixpanelDistinctId : getDistinctId()
 				def customSerializer = grailsApplication.config.grails.plugin.mixpanel.serializers."$namespace" ?: grailsApplication.config.grails.plugin.mixpanel.defaultSerializer
 				def serializedObject
-				if (customSerializer) mixpanelMessage = messageBuilder.event(mixpanelDistinctId, "$namespace::$eventName", createJsonObject(eventObject))
+				if (customSerializer)
 					serializedObject = customSerializer(eventObject)
 				else if(namespace == 'gorm')
 					serializedObject = eventObject.toString()

@@ -29,7 +29,11 @@ class MixpanelService {
 		if(deliverEventsToMixpanel) {
 			try {
 				def mixpanelDistinctId = parseDistinctIdFromEventObject ? eventObject.mixpanelDistinctId : getDistinctId()
-				def mixpanelMessage = messageBuilder.event(mixpanelDistinctId, "$namespace::$eventName", createJsonObject(eventObject))
+				def customSerializer = grailsApplication.config.grails.plugin.mixpanel.serializers."$namespace"?:
+						grailsApplication.config.grails.plugin.mixpanel.defaultSerializer
+				def serializedObject = customSerializer? customSerializer(eventObject): eventObject
+				def mixpanelMessage = messageBuilder.event(mixpanelDistinctId, "$namespace::$eventName", createJsonObject(serializedObject))
+
 				deliver(mixpanelMessage)
 			} catch(Exception ex) {
 				log.warn("Exception thrown while processing Mixpanel event.", ex)

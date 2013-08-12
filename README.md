@@ -55,8 +55,6 @@ To register an event, use the [standard mixpanel javascript API][4], e.g.
 	mixpanel.people.set({...});
 	mixpanel.track("some-event");
 
-
-
 ## Config
 
 ### grails.plugin.mixpanel.simulate
@@ -72,6 +70,16 @@ This is your mixpanel API key.
 ### grails.plugin.mixpanel.standard
 
 See Setup > Server-side
+
+### grails.plugin.mixpanel.serializers
+
+Allows you to set up custom closures that will be used to serialize objects for each namespace. Each should be a closure that takes an Object and returns a map, which the plugin will convert to JSON before sending. For example, to only send classname and id for all events in the gorm namespace:
+
+	grailsApplication.config.grails.plugin.mixpanel.serializers.gorm = { obj -> return [id: obj.id, class: obj.class] }
+
+### grails.plugin.mixpanel.defaultSerializer
+
+This allows a default serializer to be used if no custom one is defined for the current event's namespace (see 'grailsApplication.config.grails.plugin.mixpanel.serializers'). This should be defined as a closure that takes a single Object argument and returns a map, which will be converted to JSON by the plugin. In the absernce of a defaultSerializer, the behaviour of the plugin is to use the Grails JSON serializer on the Object.
 
 ### grails.plugin.mixpanel.forceasync
 
